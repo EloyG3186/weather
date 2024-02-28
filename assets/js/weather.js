@@ -61,11 +61,9 @@ let loadWeekForecastData = () => {
     let [guayaquil, ambato, tena] = weather_data
 
     let week = document.getElementsByClassName("list-group")
-    let i = 0
-    let lista = ""
-    console.log(week)
+
     for (let dia of guayaquil.forecast_week) {
-        lista = lista+
+        week[0].innerHTML = week[0].innerHTML +
             `<li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
                 <div class="d-flex flex-column">
                     <h6 class="mb-1 text-dark font-weight-bold text-sm">${dia.text}</h6>
@@ -76,10 +74,8 @@ let loadWeekForecastData = () => {
                     <div class="ms-4"><i class="material-icons fs-2 me-1 rainy">${dia.icon}</i></div>
                 </div>
             </li>`
-        i++
     }
 
-    week[0].innerHTML = lista
 }
 
 
