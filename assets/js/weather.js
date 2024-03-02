@@ -2,32 +2,33 @@
 import { weather_data } from './data.js';
 
 
-let loadDayForecastData = () => {
-    let [guayaquil, ambato, tena] = weather_data
+let loadDayForecastData = (elementoCiudad) => {
+    //    let [guayaquil, ambato, tena] = weather_data
 
-    //let {city, date, ...other} = guayaquil
+    let ciudadData = getCiudad(elementoCiudad)
+
     let ciudad = document.getElementById("city");
-    ciudad.innerHTML = guayaquil.city
+    ciudad.innerHTML = ciudadData.city
 
     let fecha = document.getElementById("date");
-    fecha.innerHTML = guayaquil.date;
+    fecha.innerHTML = ciudadData.date;
 
     let maxtemperatureHtml = document.getElementById("maxtemperature")
-    maxtemperatureHtml.innerHTML = guayaquil.maxtemperature
+    maxtemperatureHtml.innerHTML = ciudadData.maxtemperature
 
     let mintemperatureHtml = document.getElementById("mintemperature")
-    mintemperatureHtml.innerHTML = guayaquil.mintemperature
+    mintemperatureHtml.innerHTML = ciudadData.mintemperature
 
     let cloudinessHtml = document.getElementById("cloudiness")
-    cloudiness.innerHTML = guayaquil.cloudiness
+    cloudiness.innerHTML = ciudadData.cloudiness
 
     let windHtml = document.getElementById("wind")
-    wind.innerHTML = guayaquil.wind
+    wind.innerHTML = ciudadData.wind
 
     let rainfallHtml = document.getElementById("rainfall")
-    rainfall.innerHTML = guayaquil.rainfall
+    rainfall.innerHTML = ciudadData.rainfall
 
-    let [late, night] = guayaquil.forecast_today
+    let [late, night] = ciudadData.forecast_today
 
     //LATE
     let late_iconHtml = document.getElementById("late_icon")
@@ -57,12 +58,20 @@ let loadDayForecastData = () => {
 
 }
 
-let loadWeekForecastData = () => {
-    let [guayaquil, ambato, tena] = weather_data
+function getCiudad(ciudad) {
+    let ciudadData
+    weather_data.forEach(function (elemento) {
+        if (elemento.city === ciudad) { ciudadData = elemento }
+    })
+    return ciudadData;
+}
 
+let loadWeekForecastData = (ciudad) => {
     let week = document.getElementsByClassName("list-group")
+    let ciudadData = getCiudad(ciudad)
 
-    for (let dia of guayaquil.forecast_week) {
+    week[0].innerHTML = ""
+    for (let dia of ciudadData.forecast_week) {
         week[0].innerHTML = week[0].innerHTML +
             `<li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
                 <div class="d-flex flex-column">
@@ -78,6 +87,36 @@ let loadWeekForecastData = () => {
 
 }
 
+document.addEventListener("DOMContentLoaded", (event) => {
+    let Ciudades = document.getElementById("dropdownMenuButton")
 
-loadDayForecastData();
-loadWeekForecastData();
+    Ciudades.addEventListener
+
+    //CARGAN LAS CIUDADES DEL ARREGLO weather_data
+    while (Ciudades.firstChild) {
+        Ciudades.removeChild(Ciudades.firstChild);
+    }
+
+    for (let i = 0; i < weather_data.length; i++) {
+        let opcion = new Option(weather_data[i].city, weather_data[i].city)
+        Ciudades.add(opcion)
+    }
+
+    loadDayForecastData(Ciudades.value);
+
+    let loadButton = document.getElementById("loadinfo");
+
+    loadButton.addEventListener("click", function () {
+        loadWeekForecastData(Ciudades.value);
+    });
+
+
+    Ciudades.addEventListener("change", function () {
+        let ciudad = Ciudades.value;
+        loadWeekForecastData(Ciudades.value);
+        loadDayForecastData(Ciudades.value);
+    })
+
+});
+
+
